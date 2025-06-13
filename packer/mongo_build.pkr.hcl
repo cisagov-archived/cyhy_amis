@@ -20,9 +20,16 @@ build {
 
   provisioner "ansible" {
     ansible_env_vars = ["AWS_DEFAULT_REGION=${var.build_region}"]
-    groups           = ["cyhy_archive", "cyhy_commander", "cyhy_feeds", "mongo"]
-    playbook_file    = "ansible/playbook.yml"
-    use_proxy        = false
-    use_sftp         = true
+    extra_arguments = [
+      "--extra-vars",
+      "cyhy_user_home_directory=${var.cyhy_user_information.home_directory}",
+      "cyhy_user_ssh_public_key=${var.cyhy_user_information.ssh_public_key}",
+      "cyhy_user_username=${var.cyhy_user_information.username}",
+      "cyhy_user_uid=${var.cyhy_user_information.user_id}",
+    ]
+    groups        = ["cyhy_archive", "cyhy_commander", "cyhy_feeds", "mongo"]
+    playbook_file = "ansible/playbook.yml"
+    use_proxy     = false
+    use_sftp      = true
   }
 }
